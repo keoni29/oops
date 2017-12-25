@@ -12,7 +12,7 @@ class Actor(pygame.sprite.Sprite):
 		self.rect = self.image.get_rect().move(x, y)
 		self.xvel, self.yvel = 0, 0
 
-	def update(self):
+	def update(self, xvel = self.xvel, yvel = self.yvel):
 		self.rect = self.rect.move(self.xvel, self.yvel)
 		pass
 
@@ -91,7 +91,8 @@ class App:
 			self.joy.update(event.key, event.type)
 
 	def on_loop(self):
-		self.g_player.update()
+		x,y = joy.get_xy()
+		self.g_player.sprites()[0].update(x,y)
 		self.g_enemies.update()
 
 	def on_render(self):
