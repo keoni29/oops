@@ -36,6 +36,10 @@ class Actor(pygame.sprite.Sprite):
 
 			self.inv_frames -= 1
 
+	def hit(self):
+		if not self.inv_frames:
+			self.inv_frames = self.max_inv_frames
+
 class Player(Actor):
 	max_inv_frames = 60
 
@@ -45,9 +49,6 @@ class Player(Actor):
 		# Call base class (Actor) constructor
 		Actor.__init__(self, x, y)
 
-	def hit(self):
-		self.inv_frames = self.max_inv_frames
-
 class Enemy(Actor):
 	max_inv_frames = 15
 
@@ -56,9 +57,6 @@ class Enemy(Actor):
 		self.image_inv = img_ball_inv
 		# Call base class (Actor) constructor
 		Actor.__init__(self, x, y)
-
-	def hit(self):
-		self.inv_frames = self.max_inv_frames
 
 	def update(self, xvel = None, yvel = None):
 		# Call base class (Actor) update method
