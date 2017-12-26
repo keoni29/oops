@@ -7,12 +7,12 @@ class RoomLoader:
 	# Holds the level layout in a list of strings.
 	level = [
 	"WWWWWWWWWWWWWWWWWWWW",
-	"W E                W",
-	"W         WWWWWW   W",
+	"W E      P         W",
+	"W         SSSSSW   W",
 	"W   WWWW       W   W",
 	"W   W        WWWW  W",
 	"W WWW  WWWW        W",
-	"W   W     W W  E   W",
+	"W   W  S  W W  E   W",
 	"W   W     W   WWW WW",
 	"W   WWW WWW   W W  W",
 	"W     W   W P W W  W",
@@ -37,6 +37,8 @@ class RoomLoader:
 					g_enemies.add(Enemy(x, y))
 				if col == "P":
 					g_player.add(Player(x, y))
+				if col == "S":
+					g_terrain.add(Spikes(x, y))
 				x += 32
 			y += 32
 			x = 0

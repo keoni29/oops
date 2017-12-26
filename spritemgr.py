@@ -18,14 +18,13 @@ class SpriteManager:
 			player.hit()
 
 		# Control and update the player character
-		p1 = self.g_player.sprites()[0]
-		p1.update()
-
 		#TODO update enemies
 		#self.g_enemies.update()
 
+		# Move in one axis at a time, then do colision checks for both axis
 		for dx,dy in [(x,0),(0,y)]:
-			p1.move_1d(dx, dy)
+			for player in self.g_player.sprites():
+				player.move_1d(dx, dy)
 
 			collision = pygame.sprite.groupcollide(self.g_player, self.g_terrain, False, False)
 			for player,terrain in collision.iteritems():
@@ -42,11 +41,14 @@ class SpriteManager:
 					else:
 						# Pass straight through non-solid terrain for now
 						pass
+				if t.damage:
+					player.hit()
 
-		# Collision checking between actors and terrain
-		col = pygame.sprite.groupcollide(self.g_player, self.g_enemies, False, False)
-	
+		# Update all player characters
+		for player in self.g_player.sprites():
+			player.update()
+
 	def draw(self):
-		self.g_player.draw(self._display_surf)
-		self.g_enemies.draw(self._display_surf)
 		self.g_terrain.draw(self._display_surf)
+		self.g_enemies.draw(self._display_surf)
+		self.g_player.draw(self._display_surf)
