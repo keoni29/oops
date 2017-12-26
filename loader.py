@@ -1,5 +1,7 @@
 import pygame
+
 from actors import *
+from terrain import *
 
 class RoomLoader:
 	# Holds the level layout in a list of strings.

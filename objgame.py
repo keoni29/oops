@@ -18,18 +18,14 @@ class App:
 		self._display_surf = pygame.display.set_mode(self.size, pygame.HWSURFACE | pygame.DOUBLEBUF)
 		self._running = True
 
-		# Create some groups for our actors
-		self.g_player = pygame.sprite.Group(Player(200,100))
-		self.g_enemies = pygame.sprite.Group(Enemy(100,100), Enemy(300,100))
-
-		# Create a virtual joystick object
+		# Create a virtual joystick
 		self.joy = vJoystick()
 
 		# Load the first room
+		# Create a sprite manager and give it the groups
+		# we just loaded.
 		self.room_loader = RoomLoader()
 		groups = self.room_loader.load()
-
-		# Create a sprite manager
 		self.sprite_manager = SpriteManager(self._display_surf)
 		self.sprite_manager.load(groups)
 
@@ -45,7 +41,7 @@ class App:
 	def on_loop(self):
 		# Read the virtual joystick
 		x,y = self.joy.get_xy()
-		self.sprite_manager.update(x, y)
+		self.sprite_manager.update(x*2, y*2)
 
 	def on_render(self):
 		self._display_surf.fill(pygame.Color(0,0,0))

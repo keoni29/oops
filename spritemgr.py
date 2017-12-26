@@ -11,19 +11,37 @@ class SpriteManager:
 		self.g_terrain, self.g_player, self.g_enemies = groups
 
 	def update(self, x, y):
+		# Collision checking between player and enemies
+		collision = pygame.sprite.groupcollide(self.g_player, self.g_enemies, False, False)
+		for player,enemy in collision.iteritems():
+			# Player gets damaged when touching an enemy
+			player.hit()
 
 		# Control and update the player character
 		p1 = self.g_player.sprites()[0]
-		p1.fx, p1.fy = x ,y
 		p1.update()
 
-		self.g_enemies.update()
+		#TODO update enemies
+		#self.g_enemies.update()
 
-		# Collision checking between player and enemies
-		col = pygame.sprite.groupcollide(self.g_player, self.g_enemies, False, False)
-		for spr1,spr2 in col.iteritems():
-			# Player gets damaged when touching an enemy
-			spr1.hit()
+		for dx,dy in [(x,0),(0,y)]:
+			p1.move_1d(dx, dy)
+
+			collision = pygame.sprite.groupcollide(self.g_player, self.g_terrain, False, False)
+			for player,terrain in collision.iteritems():
+				for t in terrain:
+					if t.solid:
+						if dx > 0: # Moving right; Hit the left side of the wall
+							player.rect.right = t.rect.left
+						if dx < 0: # Moving left; Hit the right side of the wall
+							player.rect.left = t.rect.right
+						if dy > 0: # Moving down; Hit the top side of the wall
+							player.rect.bottom = t.rect.top
+						if dy < 0: # Moving up; Hit the bottom side of the wall
+							player.rect.top = t.rect.bottom
+					else:
+						# Pass straight through non-solid terrain for now
+						pass
 
 		# Collision checking between actors and terrain
 		col = pygame.sprite.groupcollide(self.g_player, self.g_enemies, False, False)
