@@ -7,7 +7,7 @@ class RoomLoader:
 	# Holds the level layout in a list of strings.
 	level = [
 	"WWWWWWWWWWWWWWWWWWWW",
-	"W E      P         W",
+	"W E                W",
 	"W         SSSSSW   W",
 	"W   WWWW       W   W",
 	"W   W        WWWW  W",
@@ -22,6 +22,24 @@ class RoomLoader:
 	"W     W        W   W",
 	"WWWWWWWWWWWWWWWWWWWW",
 	]
+
+	# level = [
+	# "WWWWWWWWWWWWWWWWWWWW",
+	# "WPEPPPPPPPPPPPPPPPPW",
+	# "WPPPPPPPPPSSSSSWPPPW",
+	# "WPPPWWWWPPPPPPPWPPPW",
+	# "WPPPWPPPPPPPPWWWWPPW",
+	# "WPWWWPPWWWWPPPPPPPPW",
+	# "WPPPWPPSPPWPWPPEPPPW",
+	# "WPPPWPPPPPWPPPWWWPWW",
+	# "WPPPWWWPWWWPPPWPWPPW",
+	# "WPPPPPWPPPWPPPWPWPPW",
+	# "WWWPPPWPPPWWWWWPWPPW",
+	# "WPWPPPPPPWWPPPPPPPPW",
+	# "WPWPPPWWWWPPPWWWPPPW",
+	# "WPPPPPWPPPPPPPPWPPPW",
+	# "WWWWWWWWWWWWWWWWWWWW",
+	# ]
 
 	def load(self):
 		g_terrain = pygame.sprite.Group()

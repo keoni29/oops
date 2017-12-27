@@ -14,12 +14,18 @@ class App:
 		self.size = self.weight, self.height = 640, 400
 
 	def on_init(self):
+		# Initialize pygame and subsystems
+		pygame.mixer.pre_init(44100, -16, 2, 512)
+		pygame.init()
+
 		pygame.init()
 		self._display_surf = pygame.display.set_mode(self.size, pygame.HWSURFACE | pygame.DOUBLEBUF)
 		self._running = True
 
 		# Create a virtual joystick
 		self.joy = vJoystick()
+
+		loadActorAssets()
 
 		# Load the first room
 		# Create a sprite manager and give it the groups
@@ -40,8 +46,8 @@ class App:
 
 	def on_loop(self):
 		# Read the virtual joystick
-		x,y = self.joy.get_xy()
-		self.sprite_manager.update(x*2, y*2)
+		x,y,fire = self.joy.get_xy_fire()
+		self.sprite_manager.update(x*2, y*2, fire)
 
 	def on_render(self):
 		self._display_surf.fill(pygame.Color(0,0,0))

@@ -10,6 +10,7 @@ class vJoystick:
 			pygame.K_DOWN : False,
 			pygame.K_x : False}
 		self.x, self.y = 0, 0
+		self.fire = False
 
 	def update(self, key, type):
 		if type == pygame.KEYDOWN:
@@ -35,5 +36,10 @@ class vJoystick:
 		else:
 			self.x = 0
 
-	def get_xy(self):
-		return self.x,self.y
+		if self.keystate[pygame.K_x]:
+			self.fire = True
+		else:
+			self.fire = False
+
+	def get_xy_fire(self):
+		return self.x,self.y,self.fire

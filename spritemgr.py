@@ -7,19 +7,41 @@ class SpriteManager:
 		self.g_terrain = None
 		self.g_player = None
 		self.g_enemies = None
+		self.g_projectiles = None
 	def load(self, groups):
 		self.g_terrain, self.g_player, self.g_enemies = groups
+		if self.g_projectiles:
+			self.g_projectiles.empty()
+		else:
+			self.g_projectiles = pygame.sprite.Group()
 
-	def update(self, x, y):
+	def update(self, x, y, fire):
 		# Collision checking between player and enemies
 		collision = pygame.sprite.groupcollide(self.g_player, self.g_enemies, False, False)
 		for player,enemy in collision.iteritems():
 			# Player gets damaged when touching an enemy
 			player.hit()
 
-		# Control and update the player character
-		#TODO update enemies
-		#self.g_enemies.update()
+		self.g_projectiles.update()
+
+		# Projectile gets destroyed when touching solid terrain
+		collision = pygame.sprite.groupcollide(self.g_projectiles, self.g_terrain, False, False)
+		for projectile,terrain in collision.iteritems():
+			for t in terrain:
+				if t.solid:
+					projectile.kill()
+					projectile = None
+					break
+				else:
+					# Pass straight through non-solid terrain
+					pass
+
+		# Projectile gets destroyed when touching an enemy
+		collision = pygame.sprite.groupcollide(self.g_enemies, self.g_projectiles, False, True)
+		for enemy, projectiles in collision.iteritems():
+			# Enemy gets damaged when hit by a projectile
+			for p in projectiles:
+				enemy.hit()
 
 		# Move in one axis at a time, then do colision checks for both axis
 		for dx,dy in [(x,0),(0,y)]:
@@ -46,9 +68,16 @@ class SpriteManager:
 
 		# Update all player characters
 		for player in self.g_player.sprites():
+			if fire:
+				p = player.shoot(x)
+				if p:
+					self.g_projectiles.add(p)
 			player.update()
+
+		self.g_enemies.update()
 
 	def draw(self):
 		self.g_terrain.draw(self._display_surf)
 		self.g_enemies.draw(self._display_surf)
 		self.g_player.draw(self._display_surf)
+		self.g_projectiles.draw(self._display_surf)
