@@ -59,7 +59,13 @@ class SpriteManager:
 				enemy.hit()
 
 		###
-		# 
+		# # Let enemies follow the player (test)
+		# player = self.g_players.sprites()[0]
+		# for enemy in self.g_enemies.sprites():
+		# 	a = np.angle(player.rect.centerx - enemy.rect.centerx + 1j * (player.rect.centery - enemy.rect.centery))
+		# 	xforce = 0.5 * np.cos(a)
+		# 	yforce = 0.5 * np.sin(a)
+		# 	enemy.apply_force(xforce, yforce)
 
 		###
 		# Update game objects

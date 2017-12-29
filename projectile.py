@@ -1,12 +1,13 @@
 import pygame
 from math import sqrt
 
-img_bubble = pygame.image.load("assets/bubble.bmp")
+img_bubble = None
 snd_bubble_shot = None
 
 def loadProjectileAssets():
-	global snd_bubble_shot
+	global snd_bubble_shot, img_bubble
 	snd_bubble_shot = pygame.mixer.Sound("assets/bubble-shot.wav")
+	img_bubble = pygame.image.load("assets/bubble.png").convert_alpha()
 
 class Projectile(pygame.sprite.Sprite):
 	max_distance = 10

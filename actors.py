@@ -1,8 +1,20 @@
 import pygame
 from projectile import *
 
-img_ball = pygame.image.load("assets/ball.bmp")
-img_ball_inv = pygame.image.load("assets/ball_inv.bmp")
+img_player = None
+img_player_inv = None
+img_enemy = None
+img_enemy_inv = None
+
+def loadActorAssets():
+	global img_player, img_player_inv, img_enemy, img_enemy_inv
+	
+	img_player = pygame.image.load("assets/player.png").convert_alpha()
+	img_player_inv = pygame.image.load("assets/player_inv.png").convert_alpha()
+
+	img_enemy = pygame.image.load("assets/enemy.png").convert_alpha()
+	img_enemy_inv = pygame.image.load("assets/enemy_inv.png").convert_alpha()
+
 
 class Actor(pygame.sprite.Sprite):
 	"""	Base class for all objects that can move, interact with terrain and eachother """
@@ -86,8 +98,8 @@ class Player(Actor):
 	max_shoot_frames = 20
 
 	def __init__(self, x, y):
-		self.image_normal = img_ball
-		self.image_inv = img_ball_inv
+		self.image_normal = img_player
+		self.image_inv = img_player_inv
 		# Call base class (Actor) constructor
 		Actor.__init__(self, x, y)
 
@@ -98,11 +110,11 @@ class Enemy(Actor):
 	max_inv_frames = 15
 	friction = 0.95
 	accel = 0.4
-	max_speed = 4.0
+	max_speed = 1.0
 	max_shoot_frames = 120
 
 	def __init__(self, x, y):
-		self.image_normal = img_ball
-		self.image_inv = img_ball_inv
+		self.image_normal = img_enemy
+		self.image_inv = img_enemy_inv
 		# Call base class (Actor) constructor
 		Actor.__init__(self, x, y)
