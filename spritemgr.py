@@ -52,11 +52,14 @@ class SpriteManager:
 		for enemy, projectiles in collision.iteritems():
 			# Enemy gets damaged when hit by a projectile
 			for p in projectiles:
-				a = np.angle(enemy.rect.centerx - p.rect.centerx + 1j *(enemy.rect.centery - p.rect.centery))
+				a = np.angle(p.xvel + 1j * p.yvel)
 				xforce = 4.0 * np.cos(a)
 				yforce = 4.0 * np.sin(a)
 				enemy.apply_force(xforce, yforce)
 				enemy.hit()
+
+		###
+		# 
 
 		###
 		# Update game objects
