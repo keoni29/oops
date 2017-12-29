@@ -25,7 +25,7 @@ class App:
 		# Create a virtual joystick
 		self.joy = vJoystick()
 
-		loadActorAssets()
+		loadProjectileAssets()
 
 		# Load the first room
 		# Create a sprite manager and give it the groups

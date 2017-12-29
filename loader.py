@@ -1,6 +1,7 @@
 import pygame
 
 from actors import *
+from projectile import *
 from terrain import *
 
 class RoomLoader:
@@ -43,7 +44,7 @@ class RoomLoader:
 
 	def load(self):
 		g_terrain = pygame.sprite.Group()
-		g_player = pygame.sprite.Group()
+		g_players = pygame.sprite.Group()
 		g_enemies = pygame.sprite.Group()
 		# Parse the level string above. W = wall, E = exit
 		x = y = 0
@@ -54,10 +55,10 @@ class RoomLoader:
 				if col == "E":
 					g_enemies.add(Enemy(x, y))
 				if col == "P":
-					g_player.add(Player(x, y))
+					g_players.add(Player(x, y))
 				if col == "S":
 					g_terrain.add(Spikes(x, y))
 				x += 32
 			y += 32
 			x = 0
-		return (g_terrain, g_player, g_enemies)
+		return (g_terrain, g_players, g_enemies)

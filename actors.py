@@ -1,13 +1,8 @@
 import pygame
+from projectile import *
 
 img_ball = pygame.image.load("assets/ball.bmp")
 img_ball_inv = pygame.image.load("assets/ball_inv.bmp")
-img_bubble = pygame.image.load("assets/bubble.bmp")
-snd_bubble_shot = None
-
-def loadActorAssets():
-	global snd_bubble_shot
-	snd_bubble_shot = pygame.mixer.Sound("assets/bubble-shot.wav")
 
 class Actor(pygame.sprite.Sprite):
 	"""	Base class for all objects that can move, interact with terrain and eachother """
@@ -19,6 +14,7 @@ class Actor(pygame.sprite.Sprite):
 		self.rect = self.image.get_rect().move(x, y)
 		self.fx, self.fy = 0.0, 0.0
 		self.vx, self.vy = 0.0, 0.0
+		self.dx, self.dy = 0.0, 0.0
 		self.inv_frames = 0
 		self.shoot_frames = 0
 
@@ -42,10 +38,19 @@ class Actor(pygame.sprite.Sprite):
 		if self.shoot_frames:
 			self.shoot_frames -= 1
 
-	def move_1d(self, dx, dy):
+		# Update velocity
+		self.vx = max(min(self.vx + self.fx, self.max_speed), -self.max_speed) * self.friction
+		self.vy = max(min(self.vy + self.fy, self.max_speed), -self.max_speed) * self.friction
+
+	def control(self, fx, fy):
+		self.fx, self.fy = fx, fy
+
+	def move_1d(self, x, y):
 		""" Move along one axis. dx or dy should be 0"""
-		if not dx or not dy:
-			self.rect = self.rect.move(dx, dy)
+		if not x or not y:
+			self.dx = self.vx if x else 0
+			self.dy = self.vy if y else 0
+			self.rect = self.rect.move(self.dx, self.dy)
 		else:
 			raise ValueError
 
@@ -68,7 +73,7 @@ class Actor(pygame.sprite.Sprite):
 
 class Player(Actor):
 	max_inv_frames = 60
-	friction = 0.2
+	friction = 0.90
 	accel = 0.4
 	max_speed = 4
 	max_shoot_frames = 20
@@ -81,7 +86,7 @@ class Player(Actor):
 
 class Enemy(Actor):
 	max_inv_frames = 15
-	friction = 0.1
+	friction = 0.90
 	accel = 0.4
 	max_speed = 2
 	max_shoot_frames = 120
@@ -91,19 +96,3 @@ class Enemy(Actor):
 		self.image_inv = img_ball_inv
 		# Call base class (Actor) constructor
 		Actor.__init__(self, x, y)
-
-class Projectile(Actor):
-	def __init__(self, x, y, xvel, yvel):
-		self.image_normal = img_bubble
-		Actor.__init__(self, x, y)
-		# Center sprite around origin
-		self.rect.center = self.rect.topleft
-		self.xvel, self.yvel = xvel, yvel
-
-		snd_bubble_shot.play()
-
-	def update(self):
-		self.rect = self.rect.move(self.xvel, self.yvel)
-
-	def hit(self):
-		pass
