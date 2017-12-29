@@ -6,7 +6,7 @@ from terrain import *
 
 class RoomLoader:
 	# Holds the level layout in a list of strings.
-	level = [
+	level2 = [
 	"WWWWWWWWWWWWWWWWWWWW",
 	"W E                W",
 	"W         SSSSSW   W",
@@ -21,6 +21,24 @@ class RoomLoader:
 	"W W      WW        W",
 	"W W   WWWW   WWW   W",
 	"W     W        W   W",
+	"WWWWWWWWWWWWWWWWWWWW",
+	]
+
+	level = [
+	"WWWWWWWWWWWWWWWWWWWW",
+	"WW               W W",
+	"W   E             WW",
+	"W   WWWW    WWWW   W",
+	"W                  W",
+	"W                  W",
+	"W                  W",
+	"W         P        W",
+	"W                  W",
+	"W     WW           W",
+	"W     WW     E     W",
+	"W   WWWW           W",
+	"WW         E       W",
+	"W W               WW",
 	"WWWWWWWWWWWWWWWWWWWW",
 	]
 

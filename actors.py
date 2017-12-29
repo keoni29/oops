@@ -11,12 +11,13 @@ class Actor(pygame.sprite.Sprite):
 		# Call base class (Sprite) constructor
 		pygame.sprite.Sprite.__init__(self)
 		self.image = self.image_normal
-		self.rect = self.image.get_rect().move(x, y)
-		self.fx, self.fy = 0.0, 0.0
-		self.vx, self.vy = 0.0, 0.0
+		self.xforce, self.yforce = 0.0, 0.0
+		self.xvel, self.yvel = 0.0, 0.0
 		self.dx, self.dy = 0.0, 0.0
 		self.inv_frames = 0
 		self.shoot_frames = 0
+		self.x, self.y = x, y
+		self.rect = self.image.get_rect().move(self.x, self.y)
 
 		# TODO remove debug statement
 		print 'Created ' + str(self)
@@ -39,35 +40,41 @@ class Actor(pygame.sprite.Sprite):
 			self.shoot_frames -= 1
 
 		# Update velocity
-		self.vx = max(min(self.vx + self.fx, self.max_speed), -self.max_speed) * self.friction
-		self.vy = max(min(self.vy + self.fy, self.max_speed), -self.max_speed) * self.friction
+		self.xvel = max(min(self.xvel + self.xforce, self.max_speed), -self.max_speed) * self.friction
+		self.yvel = max(min(self.yvel + self.yforce, self.max_speed), -self.max_speed) * self.friction
 
-	def control(self, fx, fy):
-		self.fx, self.fy = fx, fy
+		# Reset force after update
+		self.xforce, self.yforce = 0.0, 0.0
 
-	def move_1d(self, x, y):
-		""" Move along one axis. dx or dy should be 0"""
-		if not x or not y:
-			self.dx = self.vx if x else 0
-			self.dy = self.vy if y else 0
-			self.rect = self.rect.move(self.dx, self.dy)
+	def apply_force(self, xforce, yforce):
+		self.xforce += xforce
+		self.yforce += yforce
+
+	def move_1d(self, xmove, ymove):
+		""" Move along one axis """
+		if not xmove and ymove:
+			self.dx = 0
+			self.dy = self.yvel
+			self.y += self.dy
+		elif xmove and not ymove:
+			self.dx = self.xvel
+			self.dy = 0
+			self.x += self.dx
 		else:
 			raise ValueError
+		
+		self.rect.topleft = (self.x, self.y)
 
 	def hit(self):
 		if not self.inv_frames:
 			self.inv_frames = self.max_inv_frames
 
-	def shoot(self, direction):
+	def shoot(self, xfire, yfire):
 		""" Create a projectile moving left or right. """
 		p = None
 		if not self.shoot_frames:
 			self.shoot_frames = self.max_shoot_frames
-			if direction < 0:
-				hspeed = -4
-			else:
-				hspeed = 4
-			p = Projectile(self.rect.centerx,self.rect.centery,hspeed,0)
+			p = Projectile(self.rect.centerx,self.rect.centery,xfire * 4,yfire * 4)
 
 		return p
 
@@ -75,7 +82,7 @@ class Player(Actor):
 	max_inv_frames = 60
 	friction = 0.90
 	accel = 0.4
-	max_speed = 4
+	max_speed = 4.0
 	max_shoot_frames = 20
 
 	def __init__(self, x, y):
@@ -84,11 +91,14 @@ class Player(Actor):
 		# Call base class (Actor) constructor
 		Actor.__init__(self, x, y)
 
+	def control(self, x, y):
+		self.apply_force(x * self.accel, y * self.accel)
+
 class Enemy(Actor):
 	max_inv_frames = 15
-	friction = 0.90
+	friction = 0.95
 	accel = 0.4
-	max_speed = 2
+	max_speed = 4.0
 	max_shoot_frames = 120
 
 	def __init__(self, x, y):

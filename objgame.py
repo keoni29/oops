@@ -11,7 +11,7 @@ class App:
 	def __init__(self):
 		self._running = True
 		self._display_surf = None
-		self.size = self.weight, self.height = 640, 400
+		self.size = self.weight, self.height = 640, 480
 
 	def on_init(self):
 		# Initialize pygame and subsystems
@@ -46,8 +46,9 @@ class App:
 
 	def on_loop(self):
 		# Read the virtual joystick
-		x,y,fire = self.joy.get_xy_fire()
-		self.sprite_manager.update(x*2, y*2, fire)
+		x,y = self.joy.get_analog(0)
+		xfire,yfire = self.joy.get_analog(1)
+		self.sprite_manager.update(x, y, xfire, yfire)
 
 	def on_render(self):
 		self._display_surf.fill(pygame.Color(0,0,0))
