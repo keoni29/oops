@@ -8,7 +8,7 @@ img_enemy_inv = None
 
 def loadActorAssets():
 	global img_player, img_player_inv, img_enemy, img_enemy_inv
-	
+
 	img_player = pygame.image.load("assets/player.png").convert_alpha()
 	img_player_inv = pygame.image.load("assets/player_inv.png").convert_alpha()
 
@@ -110,7 +110,7 @@ class Enemy(Actor):
 	max_inv_frames = 15
 	friction = 0.95
 	accel = 0.4
-	max_speed = 1.0
+	max_speed = 5.0
 	max_shoot_frames = 120
 
 	def __init__(self, x, y):

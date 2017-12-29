@@ -3,10 +3,12 @@ from math import sqrt
 
 img_bubble = None
 snd_bubble_shot = None
+snd_bubble_pop = None
 
 def loadProjectileAssets():
-	global snd_bubble_shot, img_bubble
+	global snd_bubble_shot, snd_bubble_pop, img_bubble
 	snd_bubble_shot = pygame.mixer.Sound("assets/bubble-shot.wav")
+	snd_bubble_pop = pygame.mixer.Sound("assets/bubble-pop.wav")
 	img_bubble = pygame.image.load("assets/bubble.png").convert_alpha()
 
 class Projectile(pygame.sprite.Sprite):
@@ -29,6 +31,7 @@ class Projectile(pygame.sprite.Sprite):
 		self.distance -= sqrt(self.xvel ** 2 + self.yvel ** 2)
 
 	def __del__(self):
+		snd_bubble_pop.play()
 		# TODO remove debug statement
 		print 'Destroyed ' + str(self)
 
